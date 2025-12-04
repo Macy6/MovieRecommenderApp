@@ -1,6 +1,6 @@
 
   {
-      "name": "Dark-Themed Movie Aggregator App",
+      "name": "Movie Recommender App",
       "version": "0.1.0",
       "private": true,
       "dependencies": {

@@ -1,8 +1,7 @@
 
-  # Dark-Themed Movie Aggregator App
-
-  This is a code bundle for Dark-Themed Movie Aggregator App. The original project is available at https://www.figma.com/design/2XLDAgvBAbpI1wNnbXTiVt/Dark-Themed-Movie-Aggregator-App.
-
+  # MovieRecommenderApp
+  CS410 Final Project
+  
   ## Running the code
 
   Run `npm i` to install the dependencies.
