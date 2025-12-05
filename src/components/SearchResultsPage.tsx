@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Search, Film, SlidersHorizontal } from 'lucide-react';
 import { MovieCard } from './MovieCard';
 import { movies, genres, streamingPlatforms } from './mockData';
@@ -65,10 +65,10 @@ export function SearchResultsPage() {
       <header className="border-b border-gray-800/50 backdrop-blur-sm sticky top-0 z-50 bg-gray-950/80">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2 cursor-pointer">
               <Film className="w-8 h-8 text-orange-500" />
               <span className="text-xl text-white">CineScope</span>
-            </div>
+            </Link>
             <nav className="flex items-center gap-6">
               <Button 
                 variant="ghost" 
@@ -210,9 +210,12 @@ export function SearchResultsPage() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {filteredMovies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
+            {filteredMovies.map((movie) => (
+            <div key={movie.id}>
+               <MovieCard movie={movie} />
+            </div>
+            ))}
+
             </div>
 
             {filteredMovies.length === 0 && (

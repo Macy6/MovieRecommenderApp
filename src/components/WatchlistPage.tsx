@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { Film, Bookmark, Check } from 'lucide-react';
 import { MovieCard } from './MovieCard';
 import { movies } from './mockData';
@@ -24,10 +24,10 @@ export function WatchlistPage() {
       {/* Header */}
       <header className="border-b border-gray-800/50 backdrop-blur-sm sticky top-0 z-50 bg-gray-950/80">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 cursor-pointer">
             <Film className="w-8 h-8 text-orange-500" />
             <span className="text-xl text-white">CineScope</span>
-          </div>
+          </Link>
           <nav className="flex items-center gap-6">
             <Button 
               variant="ghost" 
@@ -69,13 +69,15 @@ export function WatchlistPage() {
           </TabsList>
 
           <TabsContent value="want" className="mt-8">
-            {wantToWatch.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                {wantToWatch.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))}
-              </div>
-            ) : (
+          {wantToWatch.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+           {wantToWatch.map((movie) => (
+             <div key={movie.id}>
+              <MovieCard movie={movie} />
+             </div>
+           ))}
+          </div>
+         ) : (
               <div className="text-center py-20 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl">
                 <Bookmark className="w-16 h-16 text-gray-600 mx-auto mb-4" />
                 <p className="text-gray-400 mb-4">No movies in your watchlist yet</p>
@@ -90,13 +92,15 @@ export function WatchlistPage() {
           </TabsContent>
 
           <TabsContent value="watched" className="mt-8">
-            {watched.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                {watched.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))}
-              </div>
-            ) : (
+          {watched.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+           {watched.map((movie) => (
+            <div key={movie.id}>
+              <MovieCard movie={movie} />
+            </div>
+          ))}
+          </div>
+         ) : (
               <div className="text-center py-20 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl">
                 <Check className="w-16 h-16 text-gray-600 mx-auto mb-4" />
                 <p className="text-gray-400 mb-4">No watched movies yet</p>
