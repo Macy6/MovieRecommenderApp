@@ -34,7 +34,7 @@ export function SearchResultsPage() {
     const matchesGenre = selectedGenres.length === 0 || 
       selectedGenres.some(g => movie.genres.includes(g));
 
-    return matchesSearch && matchesGenre // && matchesPlatform && matchesYear && matchesRating;
+    return matchesSearch && matchesGenre
   });
 
   return (
