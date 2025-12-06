@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Film, Bookmark, Check } from 'lucide-react';
 import { MovieCard } from './MovieCard';
-import { movies } from './mockData';
+import { loadCatalog } from '../data/catalog';
 import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { useWatchlist } from './WatchlistContext';
@@ -10,13 +10,14 @@ import { useWatchlist } from './WatchlistContext';
 export function WatchlistPage() {
   const navigate = useNavigate();
   const { watchlist } = useWatchlist();
+  const movies = useMemo(() => loadCatalog(), []);
 
   const wantToWatch = movies.filter(movie => 
-    watchlist.find(item => item.id === movie.id && item.status === 'want')
+    watchlist.find(item => String(item.id) === String(movie.id) && item.status === 'want')
   );
 
   const watched = movies.filter(movie => 
-    watchlist.find(item => item.id === movie.id && item.status === 'watched')
+    watchlist.find(item => String(item.id) === String(movie.id) && item.status === 'watched')
   );
 
   return (

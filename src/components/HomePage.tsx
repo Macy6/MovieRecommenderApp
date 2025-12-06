@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Film, TrendingUp } from 'lucide-react';
 import { MovieCard } from './MovieCard';
-import { movies, genres } from './mockData';
+import { loadCatalog, ALL_TAGS } from '../data/catalog';
 import { Button } from './ui/button';
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const movies = useMemo(() => loadCatalog(), []);
+  const genres = ALL_TAGS;
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

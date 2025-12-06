@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, Film, SlidersHorizontal } from 'lucide-react';
 import { MovieCard } from './MovieCard';
-import { movies, genres, streamingPlatforms } from './mockData';
+import { loadCatalog, ALL_TAGS } from '../data/catalog';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 
 export function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const movies = useMemo(() => loadCatalog(), []);
+  const genres = ALL_TAGS;
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const [selectedGenres, setSelectedGenres] = useState<string[]>(
     searchParams.get('genre') ? [searchParams.get('genre')!] : []
@@ -17,7 +19,14 @@ export function SearchResultsPage() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-  };
+
+    const params = new URLSearchParams();
+
+    if (searchQuery.trim()) params.set('q', searchQuery.trim());
+    if (selectedGenres.length === 1) params.set('genre', selectedGenres[0]);
+
+    navigate(`/search?${params.toString()}`);
+};
 
   const toggleGenre = (genre: string) => {
     setSelectedGenres(prev => 
@@ -30,12 +39,14 @@ export function SearchResultsPage() {
   const filteredMovies = movies.filter(movie => {
     const matchesSearch = searchQuery === '' || 
       movie.title.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesGenre = selectedGenres.length === 0 || 
-      selectedGenres.some(g => movie.genres.includes(g));
 
-    return matchesSearch && matchesGenre
+    const movieTags = (movie as any).tags ?? (movie as any).genres ?? [];
+    const matchesGenre = selectedGenres.length === 0 ||
+      selectedGenres.some(g => movieTags.includes(g));
+
+    return matchesSearch && matchesGenre;
   });
+
 
   return (
     <div className="min-h-screen">

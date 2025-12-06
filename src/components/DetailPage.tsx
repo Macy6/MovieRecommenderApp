@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Film, Calendar, Star, Bookmark, Check, Play } from 'lucide-react';
-import { movies } from './mockData';
+import { Film, Calendar, Bookmark, Check } from 'lucide-react';
+import { loadCatalog } from "../data/catalog";
 import { Button } from './ui/button';
 import { useWatchlist } from './WatchlistContext';
 
@@ -8,8 +9,9 @@ export function DetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isInWatchlist, addToWatchlist, getStatus, moveToWatched } = useWatchlist();
-  
-  const movie = movies.find(m => m.id === Number(id));
+  const movies = useMemo(() => loadCatalog(), []);
+  const movieId = id ?? '';
+  const movie = movies.find(m => String(m.id) === movieId);
   
   if (!movie) {
     return (
@@ -19,8 +21,14 @@ export function DetailPage() {
     );
   }
 
+  const movieTags: string[] = (movie as any).tags ?? (movie as any).genres ?? [];
+
   const recommendations = movies
-    .filter(m => m.id !== movie.id && m.genres.some(g => movie.genres.includes(g)))
+    .filter(m => {
+      if (String(m.id) === String(movie.id)) return false;
+      const tags = (m as any).tags ?? (m as any).genres ?? [];
+      return movieTags.length === 0 ? true : tags.some((t: string) => movieTags.includes(t));
+    })
     .slice(0, 6);
 
   const inWatchlist = isInWatchlist(movie.id);
@@ -64,22 +72,32 @@ export function DetailPage() {
       {/* Hero Section */}
       <div className="relative h-[500px] bg-gradient-to-b from-gray-900 to-gray-950">
         <div className="absolute inset-0 opacity-20">
-          <img 
-            src={movie.poster} 
-            alt={movie.title}
-            className="w-full h-full object-cover blur-2xl"
-          />
+          {movie.poster ? (
+            <img 
+              src={movie.poster} 
+              alt={movie.title}
+              className="w-full h-full object-cover blur-2xl"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-b from-gray-800/40 to-gray-900/60" />
+          )}
         </div>
         
         <div className="relative container mx-auto px-6 h-full flex items-end pb-12">
           <div className="flex gap-8 items-end">
             {/* Poster */}
             <div className="w-64 flex-shrink-0">
-              <img
-                src={movie.poster}
-                alt={movie.title}
-                className="w-full rounded-xl shadow-2xl"
-              />
+              {movie.poster ? (
+                <img
+                  src={movie.poster}
+                  alt={movie.title}
+                  className="w-full rounded-xl shadow-2xl"
+                />
+              ) : (
+                <div className="w-full aspect-[2/3] rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 flex items-center justify-center text-gray-500">
+                  No poster
+                </div>
+              )}
             </div>
 
             {/* Info */}
@@ -92,19 +110,25 @@ export function DetailPage() {
                     <span>{movie.year}</span>
                   </div>
                   <span>•</span>
-                  <span className="capitalize">{movie.type}</span>
+                  <span className="capitalize">{(movie as any).type ?? 'movie'}</span>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {movie.genres.map((genre) => (
-                  <span
-                    key={genre}
-                    className="px-3 py-1 bg-gray-800/80 border border-gray-700 rounded-full text-gray-300"
-                  >
-                    {genre}
+                {movieTags.length > 0 ? (
+                  movieTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 bg-gray-800/80 border border-gray-700 rounded-full text-gray-300"
+                    >
+                      {tag}
+                    </span>
+                  ))
+                ) : (
+                  <span className="px-3 py-1 bg-gray-800/50 border border-gray-700 rounded-full text-gray-500">
+                    No tags available
                   </span>
-                ))}
+                )}
               </div>
 
               <div className="flex gap-3">
@@ -156,7 +180,7 @@ export function DetailPage() {
             {/* Synopsis */}
             <div>
               <h2 className="text-2xl text-white mb-4">Synopsis</h2>
-              <p className="text-gray-400 leading-relaxed">{movie.synopsis}</p>
+              <p className="text-gray-400 leading-relaxed">{(movie as any).summary ?? (movie as any).synopsis ?? 'No synopsis available.'}</p>
             </div>
           </div>
         </div>
