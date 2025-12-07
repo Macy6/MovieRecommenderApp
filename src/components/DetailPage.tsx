@@ -4,6 +4,7 @@ import { Film, Calendar, Bookmark, Check } from 'lucide-react';
 import { loadCatalog } from "../data/catalog";
 import { Button } from './ui/button';
 import { useWatchlist } from './WatchlistContext';
+import { AppHeader } from './AppHeader';
 
 export function DetailPage() {
   const { id } = useParams();
@@ -37,37 +38,7 @@ export function DetailPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-gray-800/50 backdrop-blur-sm sticky top-0 z-50 bg-gray-950/80">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 focus:outline-none group"
-            aria-label="CineScope Home"
-          >
-            <Film className="w-8 h-8 text-orange-500" />
-            <span className="text-xl text-white group-hover:text-orange-100 transition-colors">CineScope</span>
-          </button>
-
-
-          <nav className="flex items-center gap-6">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/')}
-              className="text-gray-300 hover:text-white"
-            >
-              Home
-            </Button>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/watchlist')}
-              className="text-gray-300 hover:text-white"
-            >
-              Watchlist
-            </Button>
-          </nav>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* Hero Section */}
       <div className="relative h-[500px] bg-gradient-to-b from-gray-900 to-gray-950">

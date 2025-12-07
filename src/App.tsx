@@ -4,6 +4,7 @@ import { SearchResultsPage } from './components/SearchResultsPage';
 import { DetailPage } from './components/DetailPage';
 import { WatchlistPage } from './components/WatchlistPage';
 import { WatchlistProvider } from './components/WatchlistContext';
+import { AllMoviesPage } from './components/AllMoviesPage';
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
             <Route path="/search" element={<SearchResultsPage />} />
             <Route path="/movie/:id" element={<DetailPage />} />
             <Route path="/watchlist" element={<WatchlistPage />} />
+            <Route path="/movies" element={<AllMoviesPage />} />
           </Routes>
         </div>
       </Router>

@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, Film, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import { MovieCard } from './MovieCard';
 import { loadCatalog, ALL_TAGS } from '../data/catalog';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
+import { AppHeader } from './AppHeader';
 
 export function SearchResultsPage() {
   const [searchParams] = useSearchParams();
@@ -51,50 +52,22 @@ export function SearchResultsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-gray-800/50 backdrop-blur-sm sticky top-0 z-50 bg-gray-950/80">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between mb-4">
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="flex items-center gap-2 focus:outline-none group"
-            aria-label="CineScope Home"
-          >
-            <Film className="w-8 h-8 text-orange-500" />
-            <span className="text-xl text-white group-hover:text-orange-100 transition-colors">CineScope</span>
-          </button>
-
-            <nav className="flex items-center gap-6">
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/')}
-                className="text-gray-300 hover:text-white"
-              >
-                Home
-              </Button>
-              <Button 
-                variant="ghost" 
-                onClick={() => navigate('/watchlist')}
-                className="text-gray-300 hover:text-white"
-              >
-                Watchlist
-              </Button>
-            </nav>
+      <AppHeader />
+        {/* Search Bar */}
+        <div className="border-b border-gray-800/50 bg-gray-950/70">
+          <div className="container mx-auto px-6 py-4">
+            <form onSubmit={handleSearch} className="relative max-w-3xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for movies or TV shows..."
+                className="w-full bg-gray-900/50 border border-gray-800 rounded-lg py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              />
+            </form>
           </div>
-          
-          {/* Search Bar */}
-          <form onSubmit={handleSearch} className="relative max-w-3xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for movies or TV shows..."
-              className="w-full bg-gray-900/50 border border-gray-800 rounded-lg py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            />
-          </form>
         </div>
-      </header>
 
       <div className="container mx-auto px-6 py-8">
         <div className="flex gap-8">
