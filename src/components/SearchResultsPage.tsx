@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { MovieCard } from './MovieCard';
@@ -20,54 +20,50 @@ export function SearchResultsPage() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-
     const params = new URLSearchParams();
-
     if (searchQuery.trim()) params.set('q', searchQuery.trim());
     if (selectedGenres.length === 1) params.set('genre', selectedGenres[0]);
-
     navigate(`/search?${params.toString()}`);
-};
+  };
 
   const toggleGenre = (genre: string) => {
-    setSelectedGenres(prev => 
-      prev.includes(genre) 
+    setSelectedGenres(prev =>
+      prev.includes(genre)
         ? prev.filter(g => g !== genre)
         : [...prev, genre]
     );
   };
 
   const filteredMovies = movies.filter(movie => {
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch =
+      searchQuery === '' ||
       movie.title.toLowerCase().includes(searchQuery.toLowerCase());
 
     const movieTags = (movie as any).tags ?? (movie as any).genres ?? [];
-    const matchesGenre = selectedGenres.length === 0 ||
+    const matchesGenre =
+      selectedGenres.length === 0 ||
       selectedGenres.some(g => movieTags.includes(g));
 
     return matchesSearch && matchesGenre;
   });
 
-
   return (
     <div className="min-h-screen">
-      {/* Header */}
       <AppHeader />
-        {/* Search Bar */}
-        <div className="border-b border-gray-800/50 bg-gray-950/70">
-          <div className="container mx-auto px-6 py-4">
-            <form onSubmit={handleSearch} className="relative max-w-3xl">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for movies or TV shows..."
-                className="w-full bg-gray-900/50 border border-gray-800 rounded-lg py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              />
-            </form>
-          </div>
-        </div>
+
+      {/* Search Bar */}
+      <div className="container mx-auto px-6 py-4 border-b border-gray-800/50">
+        <form onSubmit={handleSearch} className="relative max-w-3xl">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search for movies or TV shows..."
+            className="w-full bg-gray-900/50 border border-gray-800 rounded-lg py-3 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+          />
+        </form>
+      </div>
 
       <div className="container mx-auto px-6 py-8">
         <div className="flex gap-8">
@@ -116,7 +112,7 @@ export function SearchResultsPage() {
                 Show Filters
               </Button>
             )}
-            
+
             <div className="mb-6">
               <p className="text-gray-400">
                 {filteredMovies.length} results found
@@ -125,8 +121,11 @@ export function SearchResultsPage() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredMovies.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
+                <div key={movie.id}>
+                  <MovieCard movie={movie} />
+                </div>
               ))}
+
             </div>
 
             {filteredMovies.length === 0 && (
